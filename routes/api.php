@@ -41,7 +41,7 @@ Route::resource('sellers','Seller\SellerController',['only' => ['index','show']]
 /**
 * Transactions
 */
-Route::resource('buyers','Transaction\TransactionController',['only' => ['index','show']]);
+Route::resource('transactions','Transaction\TransactionController',['only' => ['index','show']]);
 
 /**
 * Users

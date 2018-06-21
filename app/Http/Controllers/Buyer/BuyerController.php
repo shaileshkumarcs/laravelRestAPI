@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Buyer;
 
+use App\Buyer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -15,6 +16,19 @@ class BuyerController extends Controller
     public function index()
     {
         //
+        $buyers = Buyer::has('transactions')->get();
+
+        return response()->json(['data' => $buyers],200);
+        // $data = array(
+        //     'test' => 'HI',
+        // );
+      // return response()->json(['data' => $data],200);
+        //print_r($test);
+
+        //$user = User::all();
+
+        //return response()->json(['data'=>$user], 200);
+
     }
 
     /**

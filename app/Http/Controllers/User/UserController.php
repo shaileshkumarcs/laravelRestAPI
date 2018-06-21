@@ -127,6 +127,6 @@ class UserController extends Controller
 
         $user->delete();
 
-        return response()->json(['data'=> $user],200);
+        return response()->json(['data'=> $user],200); 
     }
 }
