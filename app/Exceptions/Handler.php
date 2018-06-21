@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Exception;
 use App\Traits\ApiResponser;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Database\QueryException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -88,6 +89,14 @@ class Handler extends ExceptionHandler
         if($exception instanceof HttpException){
 
             return $this->errorResponse($exception->getMessage(), $exception->getStatusCode());
+        }
+
+        if($exception instanceof QueryException){
+            $errorCode = $exception->errorInfo[1];
+
+            if ($errorCode == 1451) {
+                return $this->errorResponse('Cannot remove this resource parmanently. It is related to any other rescource.', 409);
+            }
         }
 
         return parent::render($request, $exception);
