@@ -4,6 +4,7 @@
 namespace App\Traits;
 
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -33,8 +34,8 @@ trait ApiResponser
 		$collection = $this->filterData($collection, $transformer);
 		$collection = $this->sortData($collection, $transformer);
 		$collection = $this->paginate($collection);
-
 		$collection = $this->transformData($collection,$transformer);
+		$collection = $this->cacheResponse($collection);
 
 		return $this->successResponse($collection, $code);
 
@@ -111,6 +112,24 @@ trait ApiResponser
 		$transformation = fractal($data, new $transformer);
 
 		return $transformation->toArray();
+	}
+
+	protected function cacheResponse($data){
+
+		$url = request()->url();
+
+		$queryParams = request()->query();
+
+		ksort($queryParams);
+
+		$queryString = http_build_query($queryParams);
+
+		$fullurl = "{$url}?{$queryString}";
+
+		return Cache::remember($fullurl, 30/60, function() use($data){
+			return $data; 
+		});
+
 	}
 }
 
