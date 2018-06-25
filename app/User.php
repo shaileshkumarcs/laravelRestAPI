@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Transformers\UserTransformer;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,6 +13,8 @@ class User extends Authenticatable
 
     const VERIFIED_USER = '1';
     const UNVERIFIED_USER = '0';
+
+    public $transformer = UserTransformer::class;
 
     const ADMIN_USER = 'true';
     const REGULAR_USER = 'false';
